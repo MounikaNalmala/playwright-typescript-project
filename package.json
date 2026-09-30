@@ -1,0 +1,19 @@
+{
+  "name": "rb-playwright-assignment",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:api": "playwright test tests/api",
+    "test:headed": "playwright test tests/e2e --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0"
+  }
+}
