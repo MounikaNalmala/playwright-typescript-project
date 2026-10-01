@@ -2,6 +2,26 @@
 
 This repository contains the Playwright + TypeScript solution for the Ritchie Bros. QA automation coding exercise. It includes both UI end-to-end tests and API/page-JSON validation.
 
+## Assignment Requirements Mapping
+
+### Part 1 — Framework Setup
+
+- ✅ TypeScript-based Playwright automation project
+- ✅ Playwright end-to-end test suite
+- ✅ API testing using Playwright request context
+- ✅ UI and API suites can be run independently
+- ✅ Page Object Model for reusable UI behavior
+- ✅ Reusable utilities for API and page JSON parsing
+- ✅ Centralized test data and expected values
+- ✅ Playwright web-first assertions with no static waits
+- ✅ User-facing locators are prioritized over DOM-coupled selectors
+- ✅ TypeScript type checking and Prettier formatting
+- ✅ Playwright HTML reporting with screenshots, traces, and videos on failure
+- ✅ GitHub Actions workflows for code quality and CI structure
+- ✅ Production-safe test design: no account creation, bidding, or seller-form submission
+
+The CI test execution step is intentionally disabled while the project targets the live production website. The workflow is ready to run against a QA or staging environment by supplying a `BASE_URL`.
+
 ## Tech Stack
 
 - Playwright
