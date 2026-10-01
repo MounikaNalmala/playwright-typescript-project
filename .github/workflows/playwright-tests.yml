@@ -36,17 +36,40 @@ jobs:
         run: npm run typecheck
 
       # Intentionally disabled for this coding exercise.
-      # The current tests target a production website, so CI must not execute them.
-      # In a real project, configure a dedicated QA/staging BASE_URL and enable this step.
+      # The tests currently target a production website, so CI must not execute them.
+      # Enable this step when a QA/staging BASE_URL is available.
       - name: Run Playwright tests (disabled - production safety)
         if: ${{ false }}
-        run: npm test
+        env:
+          BASE_URL: ${{ secrets.QA_BASE_URL }}
+        run: npm test 2>&1 | tee playwright-run.log
 
-      # Example for a non-production environment:
-      # - name: Run Playwright tests
-      #   env:
-      #     BASE_URL: ${{ secrets.QA_BASE_URL }}
-      #   run: npm test
+      # These artifacts become useful as soon as the test step above is enabled.
+      # The HTML report provides a browsable test result view. test-results contains
+      # failure screenshots, traces and retained videos configured by Playwright.
+      - name: Upload Playwright HTML report
+        if: ${{ always() && hashFiles('playwright-report/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload screenshots, traces and videos
+        if: ${{ always() && hashFiles('test-results/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 14
+
+      - name: Upload Playwright console log
+        if: ${{ always() && hashFiles('playwright-run.log') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-run-log
+          path: playwright-run.log
+          retention-days: 14
 
       - name: Test execution notice
-        run: echo "Playwright test execution is intentionally disabled because the current target is a production site."
+        run: echo "Playwright execution is intentionally disabled because the current target is production. Reporting, screenshots, traces, videos and logs are ready for a QA/staging run."
