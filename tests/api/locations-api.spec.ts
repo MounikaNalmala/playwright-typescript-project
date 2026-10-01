@@ -8,14 +8,18 @@ import {
   getPageJson
 } from '../../src/utils/page-json.utils';
 
-test.describe('API 1 - Auction sites list', () => {
-  test('A1.1 - payload should contain a list of yards/locations', async ({ request }) => {
-    const payload = await getPageJson(request, testData.urls.locations);
-    expect(payload).toBeDefined();
-    const locations = findLocations(payload);
-    expect(Array.isArray(locations)).toBeTruthy();
-    expect(locations.length).toBeGreaterThan(0);
-  });
+test.describe('API 1 - Auction sites list', { tag: '@api' }, () => {
+  test(
+    'A1.1 - payload should contain a list of yards/locations',
+    { tag: '@smoke' },
+    async ({ request }) => {
+      const payload = await getPageJson(request, testData.urls.locations);
+      expect(payload).toBeDefined();
+      const locations = findLocations(payload);
+      expect(Array.isArray(locations)).toBeTruthy();
+      expect(locations.length).toBeGreaterThan(0);
+    }
+  );
   test('A1.2 - location count should be greater than 60', async ({ request }) => {
     const locations = findLocations(await getPageJson(request, testData.urls.locations));
     expect(locations.length).toBeGreaterThan(testData.api.locations.minimumLocationCount);
