@@ -10,15 +10,17 @@ import {
   getYardPhone
 } from '../../src/utils/page-json.utils';
 
-test.describe('API 2 - Edmonton yard page JSON', () => {
-  test('A2.1 - payload should be valid JSON and contain Edmonton yard data', async ({
-    request
-  }) => {
-    const payload = await getPageJson(request, testData.urls.edmonton);
-    expect(payload).toBeDefined();
-    expect(typeof payload).toBe('object');
-    expect(findEdmontonYard(payload)).toBeDefined();
-  });
+test.describe('API 2 - Edmonton yard page JSON', { tag: '@api' }, () => {
+  test(
+    'A2.1 - payload should be valid JSON and contain Edmonton yard data',
+    { tag: '@smoke' },
+    async ({ request }) => {
+      const payload = await getPageJson(request, testData.urls.edmonton);
+      expect(payload).toBeDefined();
+      expect(typeof payload).toBe('object');
+      expect(findEdmontonYard(payload)).toBeDefined();
+    }
+  );
   test('A2.2 - yard should contain Edmonton details, address, phone and hours', async ({
     request
   }) => {
