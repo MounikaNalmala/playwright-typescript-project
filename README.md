@@ -1,28 +1,6 @@
 # Ritchie Bros. Playwright Automation Assignment
 
-This repository contains the Playwright + TypeScript solution for the Ritchie Bros. QA automation coding exercise. It demonstrates a maintainable automation framework covering UI end-to-end testing, API/page-JSON validation, selective test execution, reporting, diagnostics, and CI-ready structure.
-
-## Assignment Requirements Mapping
-
-### Part 1 — Framework Setup
-
-- ✅ TypeScript-based Playwright automation project
-- ✅ Playwright end-to-end test suite
-- ✅ API testing using Playwright request context
-- ✅ UI and API suites can be run independently
-- ✅ Page Object Model for reusable UI behavior
-- ✅ Reusable utilities for API and page JSON parsing
-- ✅ Centralized test data and expected values
-- ✅ Playwright web-first assertions with no static waits
-- ✅ User-facing locators are prioritized over DOM-coupled selectors
-- ✅ TypeScript type checking and Prettier formatting
-- ✅ Playwright HTML reporting with screenshots, traces, and videos on failure
-- ✅ Meaningful `test.step()` sections for readable reports and traces
-- ✅ Test tagging for UI, API, and smoke execution
-- ✅ GitHub Actions workflows for code quality and CI structure
-- ✅ Production-safe test design: no account creation, bidding, or seller-form submission
-
-The CI test execution step is intentionally disabled while the project targets the live production website. The workflow is ready to run against a QA or staging environment by supplying a `BASE_URL`.
+Playwright + TypeScript test project for the Ritchie Bros. QA automation coding exercise. The project covers the requested UI scenarios, page JSON validation, and inventory search API tests.
 
 ## Tech Stack
 
@@ -38,225 +16,130 @@ The CI test execution step is intentionally disabled while the project targets t
 .
 ├── src/
 │   ├── data/                 # Test data and expected values
-│   ├── pages/                # Page Object Model classes
-│   └── utils/                # Reusable API and page JSON helpers
+│   ├── pages/                # Page objects
+│   └── utils/                # JSON and API helpers
 ├── tests/
-│   ├── api/                  # API/page JSON tests (@api)
-│   └── e2e/                  # UI end-to-end tests (@ui)
-├── .github/workflows/        # Code quality and Playwright CI workflows
-├── playwright.config.ts      # Playwright configuration and reporting
-├── package.json              # Scripts and dependencies
-└── package-lock.json         # Locked dependency versions for reproducible installs
+│   ├── api/                  # API/page JSON tests
+│   └── e2e/                  # UI tests
+├── .github/workflows/        # Quality and Playwright workflows
+├── playwright.config.ts
+├── package.json
+└── package-lock.json
 ```
 
-## Test Coverage
+## Coverage
 
-### UI — `@ui`
+### UI (`@ui`)
 
 - Scenario 1: Locations directory — 1.1–1.7 and 1.9
 - Scenario 2: Open Edmonton yard — 2.1–2.2
 - Scenario 3: Edmonton yard page — 3.1–3.6
 - Scenario 4: Edmonton inventory search — 4.1–4.2
 
-### API / Page JSON — `@api`
+### API (`@api`)
 
-- API 1: Auction sites page JSON — A1.1–A1.6 plus a negative scenario
-- API 2: Edmonton yard page JSON — A2.1–A2.4 plus a negative scenario
-- API 3: Edmonton inventory search — A3.1–A3.4 plus a negative scenario
+- API 1: Auction sites page JSON — A1.1–A1.6 and a negative scenario
+- API 2: Edmonton yard page JSON — A2.1–A2.4 and a negative scenario
+- API 3: Edmonton inventory search — A3.1–A3.4 and a negative scenario
 
-### Smoke — `@smoke`
+A small set of happy-path checks is also tagged `@smoke` for quick validation.
 
-A small set of representative happy-path tests is tagged `@smoke`. This demonstrates how a fast validation suite can be separated from the broader UI and API regression coverage.
+## Setup
 
-The test names intentionally match the scenario numbers in the assignment so coverage is easy to trace in the Playwright report.
+Requirements:
 
-## Prerequisites
-
-Install the following before running the project:
-
-- Node.js 20 or later
+- Node.js 20+
 - npm
 - Git
 
-## Installation
-
-Clone the repository and install the locked dependencies:
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/MounikaNalmala/playwright-typescript-project.git
 cd playwright-typescript-project
 npm ci
-```
-
-Install the Chromium browser used by the Playwright project:
-
-```bash
 npx playwright install chromium
 ```
 
-On Linux/CI, Playwright system dependencies can also be installed with:
+For Linux/CI:
 
 ```bash
 npx playwright install --with-deps chromium
 ```
 
-## Running the Tests
+## Running Tests
 
-> **Production safety:** The default target is the public production website. The tests are designed to be read-only, but reviewers should avoid unnecessary repeated execution against production. CI execution is intentionally disabled until a safe QA/staging `BASE_URL` is supplied.
-
-Run the complete suite:
+Run the full suite:
 
 ```bash
 npm test
 ```
 
-Run the existing UI script:
+Run UI or API tests:
 
 ```bash
 npm run test:e2e
-```
-
-Run the existing API script:
-
-```bash
 npm run test:api
 ```
 
-### Run by Playwright tag
-
-Run all UI tests:
-
-```bash
-npx playwright test --grep @ui
-```
-
-Run all API tests:
-
-```bash
-npx playwright test --grep @api
-```
-
-Run the smaller smoke suite:
+Run tests by tag:
 
 ```bash
 npx playwright test --grep @smoke
+npx playwright test --grep @ui
+npx playwright test --grep @api
 ```
 
-Tags make the framework easy to extend into CI jobs such as smoke, API, UI, or full regression execution without reorganizing the test files.
-
-### Development and debugging
-
-Run UI tests in headed mode:
+Useful local commands:
 
 ```bash
 npm run test:headed
-```
-
-Run Playwright in debug mode:
-
-```bash
 npm run test:debug
-```
-
-Run TypeScript validation without executing tests:
-
-```bash
-npm run typecheck
-```
-
-## Code Formatting
-
-Check formatting:
-
-```bash
-npm run format:check
-```
-
-Apply Prettier formatting:
-
-```bash
-npm run format
-```
-
-## Test Reports and Diagnostics
-
-Playwright is configured with an HTML reporter. After a local test run, open the report with:
-
-```bash
-npm run report
-```
-
-The framework captures useful diagnostics when a test fails:
-
-- Screenshot on failure
-- Trace on failure
-- Video on failure
-- HTML test report
-- Test execution logs in CI artifact structure
-
-Larger UI scenarios also use selective `test.step()` blocks around meaningful business actions. This keeps the source code readable while making the HTML report and Playwright Trace Viewer easier to follow. Instead of seeing only a long sequence of assertions, a reviewer can identify the important action or validation being performed.
-
-Generated output is available under `test-results/` and `playwright-report/` when applicable.
-
-## CI / GitHub Actions
-
-The repository includes GitHub Actions for code quality and a Playwright test workflow.
-
-The quality workflow demonstrates automated validation such as formatting and TypeScript checks. The Playwright workflow demonstrates the structure required to install dependencies/browsers, execute automation, and publish test evidence.
-
-The actual Playwright test execution step is intentionally disabled because this coding exercise targets the live Ritchie Bros. production website. The workflow still demonstrates how reports, screenshots, traces, videos, and logs would be uploaded as GitHub Actions artifacts after execution.
-
-In a real project, the test step would be enabled against a dedicated QA or staging environment. The Playwright configuration supports a `BASE_URL` environment variable so the target environment can be changed without modifying test code.
-
-Example:
-
-```bash
-BASE_URL=https://your-test-environment.example.com npm test
-```
-
-The tags can then be used to create purpose-specific CI jobs, for example:
-
-```bash
-npx playwright test --grep @smoke
-npx playwright test --grep @api
-npx playwright test --grep @ui
-```
-
-## Production Safety
-
-The default target for this exercise is `https://www.rbauction.com`.
-
-The automated scenarios are read-only. They do not place bids, submit the Become a Seller form, create users, or intentionally perform other production-changing actions. The inventory search API uses the search endpoint only to retrieve results.
-
-Because this is a live website, inventory totals, auction events, and other data can change. Assertions therefore validate the assignment requirements rather than relying on fixed live counts where the specification says the values are dynamic.
-
-The production site may also apply bot/WAF protection to automated browser or API traffic. If a run receives an Access Denied or HTTP 403 response, that may be an environment/security restriction rather than a functional assertion failure.
-
-## Framework Design Notes
-
-The solution uses Page Object Model classes for reusable UI behavior, utility functions for JSON/API parsing, and centralized test data to keep specifications readable and maintainable.
-
-Locators prioritize Playwright's user-facing locators such as `getByRole`, `getByLabel`, and `getByText`, with stable fallbacks only where necessary. Tests use Playwright web-first assertions and avoid static waits.
-
-UI and API scenarios are separated physically and also tagged with `@ui` and `@api`, while representative happy paths use `@smoke`. This supports both straightforward local execution and future CI test-suite segmentation.
-
-`test.step()` is used selectively rather than around every assertion. The goal is to make reports and traces communicate business-level test intent without adding unnecessary abstraction to the test code.
-
-## Reviewer Quick Start
-
-For a reviewer who wants to inspect the framework quickly:
-
-```bash
-npm ci
-npx playwright install chromium
 npm run typecheck
 npm run format:check
 ```
 
-To inspect available tests without executing them against production:
+To list tests without running them against the live site:
 
 ```bash
 npx playwright test --list
 ```
 
-When execution against the target environment is appropriate, tests can be selected using `@smoke`, `@ui`, or `@api`, and the resulting HTML report can be opened with `npm run report`.
+## Reporting
+
+Playwright HTML reporting is enabled. Open the latest report with:
+
+```bash
+npm run report
+```
+
+On failures, the configuration retains screenshots, traces, and videos. Selected UI flows use `test.step()` so important actions are easier to follow in the HTML report and Trace Viewer.
+
+## CI
+
+GitHub Actions workflows are included for formatting/type checks and Playwright test execution structure.
+
+The Playwright execution step is intentionally disabled in CI because the assignment targets the live production website. In a real project, the same workflow can run against a QA or staging environment by providing `BASE_URL`.
+
+```bash
+BASE_URL=https://your-test-environment.example.com npm test
+```
+
+## Production Safety
+
+The default target is `https://www.rbauction.com`.
+
+The automated scenarios are read-only. They do not create accounts, place bids, or submit the Become a Seller form. The inventory search API test only performs a search request.
+
+Because this is a live site, inventory totals, auction events, and other data can change. The tests use the thresholds and validation rules from the assignment instead of hard-coding dynamic totals.
+
+The site may also block automated traffic through its security/WAF layer. An Access Denied or HTTP 403 response can therefore be an environment restriction rather than an application assertion failure.
+
+## Framework Notes
+
+- Page objects keep UI locators and reusable page behavior outside the specs.
+- Test data and expected values are centralized under `src/data`.
+- Locators prefer `getByRole`, `getByLabel`, and `getByText`, with stable fallbacks where needed.
+- Tests use Playwright web-first assertions and do not use static waits.
+- API/page JSON parsing is kept in reusable utilities so the API specs stay focused on validation.
+- `@smoke`, `@ui`, and `@api` tags allow selective execution without changing the folder structure.
