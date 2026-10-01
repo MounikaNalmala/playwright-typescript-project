@@ -2,16 +2,20 @@ import { test, expect } from '@playwright/test';
 import { LocationsPage } from '../../src/pages/locations.page';
 import { testData } from '../../src/data/test-data';
 
-test.describe('Scenario 1 - Locations directory', () => {
+test.describe('Scenario 1 - Locations directory', { tag: '@ui' }, () => {
   let locationsPage: LocationsPage;
   test.beforeEach(async ({ page }) => {
     locationsPage = new LocationsPage(page);
     await locationsPage.open();
   });
-  test('1.1 - should display Locations heading and directory introduction', async ({ page }) => {
-    await expect(locationsPage.heading).toBeVisible();
-    await expect(page.getByText(testData.locationsPage.introText)).toBeVisible();
-  });
+  test(
+    '1.1 - should display Locations heading and directory introduction',
+    { tag: '@smoke' },
+    async ({ page }) => {
+      await expect(locationsPage.heading).toBeVisible();
+      await expect(page.getByText(testData.locationsPage.introText)).toBeVisible();
+    }
+  );
   test('1.2 - should explain how satellite sites are identified', async ({ page }) => {
     await expect(page.getByText(testData.locationsPage.satelliteNote)).toBeVisible();
   });
