@@ -11,13 +11,17 @@ import {
 const search = (request: APIRequestContext, text: string) =>
   request.post(testData.api.inventorySearch.endpoint, { data: { freeText: text } });
 
-test.describe('API 3 - Edmonton inventory search', () => {
-  test('A3.1 - response should return HTTP 200 and JSON', async ({ request }) => {
-    const response = await search(request, testData.api.inventorySearch.searchText);
-    expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(isRecord(await response.json())).toBeTruthy();
-  });
+test.describe('API 3 - Edmonton inventory search', { tag: '@api' }, () => {
+  test(
+    'A3.1 - response should return HTTP 200 and JSON',
+    { tag: '@smoke' },
+    async ({ request }) => {
+      const response = await search(request, testData.api.inventorySearch.searchText);
+      expect(response.status()).toBe(200);
+      expect(response.headers()['content-type']).toContain('application/json');
+      expect(isRecord(await response.json())).toBeTruthy();
+    }
+  );
   test('A3.2 - total inventory result count should be greater than 0', async ({ request }) => {
     const response = await search(request, testData.api.inventorySearch.searchText);
     expect(getTotalAmount(getSearchResults(await response.json()))).toBeGreaterThan(0);
